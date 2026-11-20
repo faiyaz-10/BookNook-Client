@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { api, type Book } from "@/lib/api";
@@ -15,32 +15,30 @@ export default function BookDetails({ id }: { id: string }) {
   const [modal, setModal] = useState(false);
   const [saving, setSaving] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const savingRef = useRef(false);
   const router = useRouter();
 
-  const loadBook = useCallback(async (signal?: AbortSignal) => {
+  const loadBook = useCallback(async (signal?: AbortSignal): Promise<Book | null> => {
     setLoading(true);
     setLoadError("");
     try {
-      const result = await api<{ book: Book }>(`/books/${id}`, { signal }, true);
+      const result = await api<{ book: Book }>(`/books/${id}`, { signal });
       setBook(result.book);
+      return result.book;
     } catch (error) {
-      if (signal?.aborted) return;
+      if (signal?.aborted) return null;
       setLoadError(error instanceof Error ? error.message : "Could not load this book.");
+      return null;
     } finally {
       if (!signal?.aborted) setLoading(false);
     }
   }, [id]);
 
   useEffect(() => {
-    if (isPending) return;
-    if (!session) {
-      router.replace(`/login?callbackURL=${encodeURIComponent(`/books/${id}`)}`);
-      return;
-    }
     const controller = new AbortController();
     void loadBook(controller.signal);
     return () => controller.abort();
-  }, [id, isPending, loadBook, router, session]);
+  }, [loadBook]);
 
   useEffect(() => {
     const updateAvailability = (event: Event) => {
@@ -64,6 +62,7 @@ export default function BookDetails({ id }: { id: string }) {
   }, [isPending, session]);
 
   const requestBorrow = () => {
+    if (isPending) return;
     if (!session) {
       router.push(`/login?callbackURL=${encodeURIComponent(`/books/${id}?borrow=true`)}`);
       return;
@@ -72,7 +71,9 @@ export default function BookDetails({ id }: { id: string }) {
   };
 
   const borrow = async () => {
-    if (!book || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > book.availableCopies) return;
+    if (savingRef.current || !book
+      || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > book.availableCopies) return;
+    savingRef.current = true;
     setSaving(true);
     try {
       await api("/borrows", {
@@ -81,15 +82,21 @@ export default function BookDetails({ id }: { id: string }) {
       }, true);
       toast.success(`${quantity} ${quantity === 1 ? "copy" : "copies"} borrowed successfully.`);
       setModal(false);
-      await loadBook();
+      const updatedBook = await loadBook();
+      if (updatedBook) {
+        window.dispatchEvent(new CustomEvent("booknook:availability-changed", {
+          detail: { _id: updatedBook._id, availableCopies: updatedBook.availableCopies },
+        }));
+      }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not borrow this book.");
     } finally {
+      savingRef.current = false;
       setSaving(false);
     }
   };
 
-  if (isPending || loading) {
+  if (loading) {
     return <main className="page-shell"><div className="container"><Loader /></div></main>;
   }
   if (loadError) {
@@ -138,11 +145,10 @@ export default function BookDetails({ id }: { id: string }) {
               <div className="meta-box">
                 <small>Added by</small>
                 <strong>{book.userName}</strong>
-                <small className="meta-email">{book.userEmail?.toLowerCase() || ""}</small>
               </div>
             </div>
             {book.availableCopies > 0
-              ? <button className="btn" type="button" onClick={requestBorrow}>Borrow This Book</button>
+              ? <button className="btn" type="button" disabled={isPending} onClick={requestBorrow}>Borrow This Book</button>
               : <button className="btn" type="button" disabled>Not Available</button>}
           </div>
         </div>
