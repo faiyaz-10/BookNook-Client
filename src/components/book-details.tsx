@@ -138,7 +138,7 @@ export default function BookDetails({ id }: { id: string }) {
               <div className="meta-box">
                 <small>Added by</small>
                 <strong>{book.userName}</strong>
-                <small>{book.userEmail || ""}</small>
+                <small className="meta-email">{book.userEmail?.toLowerCase() || ""}</small>
               </div>
             </div>
             {book.availableCopies > 0

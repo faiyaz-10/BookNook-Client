@@ -1000,6 +1000,12 @@ select:focus-visible {
   text-transform: uppercase;
 }
 
+.meta-box .meta-email {
+  font-size: 11px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 .meta-box strong {
   font-size: 14px;
   line-height: 1.5;
