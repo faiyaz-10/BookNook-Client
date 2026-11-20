@@ -1,0 +1,1 @@
+import MyBorrowsPage from "@/components/my-borrows-page"; import PrivatePage from "@/components/private-page"; export const metadata={title:"BookNook | My Borrows"}; export default function Page(){return <PrivatePage path="/my-borrows"><MyBorrowsPage/></PrivatePage>}

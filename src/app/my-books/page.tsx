@@ -1,0 +1,1 @@
+import MyBooksPage from "@/components/my-books-page"; import PrivatePage from "@/components/private-page"; export const metadata={title:"BookNook | My Books"}; export default function Page(){return <PrivatePage path="/my-books"><MyBooksPage/></PrivatePage>}

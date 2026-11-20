@@ -1,0 +1,161 @@
+.heroSlider {
+  position: relative;
+}
+
+.heroSlider .discoverSlide {
+  background-image:
+    linear-gradient(90deg, rgba(20, 43, 32, 0.9), rgba(20, 43, 32, 0.4)),
+    url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1800");
+  background-position: center;
+  background-size: cover;
+}
+
+.heroSlider .shareSlide {
+  background-image:
+    linear-gradient(90deg, rgba(20, 43, 32, 0.91), rgba(20, 43, 32, 0.35)),
+    url("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1800");
+  background-position: center;
+  background-size: cover;
+}
+
+.heroSlider .curiositySlide {
+  background-image:
+    linear-gradient(90deg, rgba(20, 43, 32, 0.91), rgba(20, 43, 32, 0.35)),
+    url("https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=1800");
+  background-position: center;
+  background-size: cover;
+}
+
+.sliderArrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 50%;
+  background: rgba(31, 55, 42, 0.58);
+  color: white;
+  transform: translateY(-50%);
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.sliderArrow:hover {
+  border-color: rgba(255, 255, 255, 0.75);
+  background: rgba(31, 55, 42, 0.9);
+}
+
+.sliderArrowPrevious {
+  left: 18px;
+}
+
+.sliderArrowNext {
+  right: 18px;
+}
+
+.sectionTint {
+  background: #efefe8;
+}
+
+.stepsGrid,
+.benefitsGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.categoryGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.categoryCard {
+  min-height: 190px;
+  padding: 23px;
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(246, 246, 240, 0.96));
+}
+
+.categoryCard:nth-child(2) {
+  background: linear-gradient(155deg, #f8f7f3, #e8eee5);
+}
+
+.categoryCard:nth-child(3) {
+  background: linear-gradient(155deg, #fbf8f1, #eee8db);
+}
+
+.categoryCard:nth-child(4) {
+  background: linear-gradient(155deg, #f7f7f1, #e5ebe2);
+}
+
+.categoryCount {
+  display: block;
+  margin-top: 25px;
+  color: var(--green);
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stepLabel {
+  display: block;
+  margin-top: 16px;
+  color: var(--green);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.stepsGrid h3,
+.benefitsGrid h3 {
+  margin-top: 8px;
+}
+
+.callout {
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .stepsGrid,
+  .benefitsGrid,
+  .categoryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .sliderArrow {
+    top: auto;
+    bottom: 18px;
+    width: 36px;
+    height: 36px;
+    transform: none;
+  }
+
+  .sliderArrowPrevious {
+    left: auto;
+    right: 60px;
+  }
+
+  .sliderArrowNext {
+    right: 15px;
+  }
+
+  .stepsGrid,
+  .benefitsGrid,
+  .categoryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .categoryCard {
+    min-height: 155px;
+  }
+
+  .categoryCount {
+    margin-top: 16px;
+  }
+
+  .callout {
+    margin-top: 0;
+  }
+}
