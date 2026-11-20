@@ -2,8 +2,6 @@
 
 **Live website:** [https://book-nook-client-mu.vercel.app](https://book-nook-client-mu.vercel.app)
 
-**Backend API:** [https://book-nook-server-chi.vercel.app](https://book-nook-server-chi.vercel.app)
-
 BookNook is a community-powered online bookshelf for readers to discover, share, and borrow books. Browse the collection, check availability, and keep track of books you have contributed or borrowed. The site includes account registration and sign-in so readers can manage their own books and borrowing activity.
 
 ## Features
