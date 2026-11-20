@@ -31,19 +31,24 @@ export default function LoginForm() {
     event.preventDefault();
     setError("");
     setBusy(true);
-    const { error: signInError } = await authClient.signIn.email({
-      email,
-      password,
-      callbackURL: destination,
-    });
-    if (signInError) {
-      setError(signInError.message || "Unable to sign in. Check your details.");
+    try {
+      const { error: signInError } = await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: destination,
+      });
+      if (signInError) {
+        setError(signInError.message || "Unable to sign in. Check your details.");
+        return;
+      }
+      toast.success("Welcome back.");
+      router.push(destination);
+      router.refresh();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to sign in. Check your details.");
+    } finally {
       setBusy(false);
-      return;
     }
-    toast.success("Welcome back.");
-    router.push(destination);
-    router.refresh();
   };
 
   const google = async () => {

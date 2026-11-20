@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { api, type Borrow } from "@/lib/api";
 import { authClient } from "@/lib/auth-client";
@@ -13,6 +14,7 @@ export default function ProfilePage() {
   const [borrows, setBorrows] = useState<Borrow[]>([]);
   const [loadingBorrows, setLoadingBorrows] = useState(true);
   const [borrowError, setBorrowError] = useState("");
+  const sessionUserId = session?.user.id;
 
   useEffect(() => {
     if (session) setName(session.user.name);
@@ -32,8 +34,8 @@ export default function ProfilePage() {
   }, []);
 
   useEffect(() => {
-    if (session) void loadBorrows();
-  }, [session?.user.id, loadBorrows]);
+    if (sessionUserId) void loadBorrows();
+  }, [sessionUserId, loadBorrows]);
 
   const updateName = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -142,7 +144,7 @@ export default function ProfilePage() {
             <div className="empty">
               <h3>No borrowed books</h3>
               <p>Explore the library and borrow your first book.</p>
-              <a className="btn" href="/books">Browse Books</a>
+              <Link className="btn" href="/books">Browse Books</Link>
             </div>
           )}
         </section>
